@@ -1,9 +1,11 @@
+import Crousel from "./component/crousel/Crousel";
 import Test from "./component/Test";
 
 function App() {
   return (
     <div className="App">
-      <Test></Test>
+      {/* <Test></Test> */}
+      <Crousel></Crousel>
     </div>
   );
 }
