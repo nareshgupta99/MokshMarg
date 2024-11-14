@@ -2,11 +2,16 @@ const express =require("express");
 const app=express();
 const dotenv=require("dotenv");
 const mongoose = require('mongoose');
+const { isAuthenticated } = require("./config/security.config");
 
 dotenv.config();
 
 const PORT = process.env.PORT || 8080;
 
+
+app.get("/hi",isAuthenticated,(req,res)=>{
+  res.send("hi")
+})
 
 
 
