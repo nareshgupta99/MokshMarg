@@ -1,7 +1,7 @@
 const express = require("express");
 const routes = express.Router();
 const { isAuthenticated } = require("../config/security.config");
-const { updatePassword, registerUser, login,genratePasswordResetToken,resetPassword }=require("../controllers/User.Controller");
+const { updatePassword, registerUser, login,genratePasswordResetToken,resetPassword }=require("../controllers/user.controller");
 
 
 

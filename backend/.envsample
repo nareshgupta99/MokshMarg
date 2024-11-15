@@ -1,0 +1,16 @@
+#to run this project create .env file at place of .envsample and copy all of this property into .env file
+
+PORT =5000
+EXPIRY_TIME=2d
+SECRET=
+CORS=http://localhost:3000
+
+
+
+# email configuration
+EMAIL_HOST="smtp.gmail.com"
+EMAIL_PORT=587
+EMAIL_SERVICE="gmail"
+EMAIL_USER="jainnaresh1998@gmail.com"
+EMAIL_PASSWORD=
+
