@@ -60,6 +60,8 @@ async function isAuthenticated(req, res, next) {
 
 }
 
+
+
 function getDecodedToken() {
   return decodedToken;
 }

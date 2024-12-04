@@ -1,3 +1,4 @@
+import Button from "./component/Button";
 import Crousel from "./component/crousel/Crousel";
 import Test from "./component/Test";
 

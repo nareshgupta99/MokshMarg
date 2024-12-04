@@ -21,6 +21,8 @@ routes.post("/forgot",genratePasswordResetToken);
 
 routes.post("/reset-password",resetPassword);
 
+routes.get("/email-verify");
+
 
 
 

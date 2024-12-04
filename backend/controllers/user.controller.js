@@ -30,15 +30,15 @@ const updatePassword = asyncErrorHandler(async (req, res) => {
     }
 })
 
-const registerUser = asyncErrorHandler(async (req, res) => {
+const registerUser  = (async (req, res)  => {
     console.log("in")
     const user = req.body;
     console.log(user)
-    const hash = await encryptPassword(user.password);
+        const hash = await encryptPassword(user.password);
+        const savedUser = await User.create(user);
+        const token = await genrateJwtToken(user);
     user.password = hash;
-    const savedUser = await User.create(user);
     const { password, ...responseUser } = user
-    const token = await genrateJwtToken(user);
     res.status(200).json({
         token: token,
         message: "user is successfully registered",
@@ -128,6 +128,10 @@ const resetPassword= asyncErrorHandler(async (req,res)=>{
     res.status(200).json({
         message:"password changed successfully"
     })
+})
+
+const emailVerify = asyncErrorHandler(async (req,res)=>{
+    
 })
 
 
