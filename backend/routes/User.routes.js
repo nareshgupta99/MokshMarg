@@ -2,13 +2,12 @@ const express = require("express");
 const routes = express.Router();
 const { isAuthenticated } = require("../config/security.config");
 const { updatePassword, registerUser, login,genratePasswordResetToken,resetPassword }=require("../controllers/user.controller");
-
-
+const asyncErrorHandler = require("../utils/GlobalExceptionHandle");
 
 
 
 // to creating a user
-routes.post("/signup",registerUser);
+routes.post("/signup",asyncErrorHandler(registerUser));
 
 // login api
 routes.post("/login", login);
