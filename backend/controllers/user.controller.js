@@ -3,14 +3,14 @@ const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 const crypto = require('crypto');
 const emailSend = require('../config/email.config')
-const asyncErrorHandler = require("../config/GlobalExceptionHandle");
 const User=require("../models/user.model") 
+const ApiError=require("../utils/ApiError")
 
 
 
 dotenv.config();
 
-const updatePassword = asyncErrorHandler(async (req, res) => {
+const updatePassword = (async (req, res) => {
     const { currentPassword, newPassword } = req.body;
     const { email } = getDecodedToken();
     const user = await User.findOne({ email });
@@ -31,14 +31,25 @@ const updatePassword = asyncErrorHandler(async (req, res) => {
 })
 
 const registerUser  = (async (req, res)  => {
-    console.log("in")
-    const user = req.body;
-    console.log(user)
-        const hash = await encryptPassword(user.password);
-        const savedUser = await User.create(user);
-        const token = await genrateJwtToken(user);
-    user.password = hash;
-    const { password, ...responseUser } = user
+    const {email,password,confirmPassword,name} = req.body;
+    if(password != confirmPassword){
+        throw new ApiError(401,"password and confirm password must be match");
+    }
+        const hash = await encryptPassword(password);
+    
+        const user=await User.findOne({email});
+        if(user){
+            throw new ApiError(401,"user already registerd");
+        }
+   
+        const savedUser = await User.create({
+            email,
+            password:hash,
+            name
+        });
+        const token = await genrateJwtToken({
+            email
+        });
     res.status(200).json({
         token: token,
         message: "user is successfully registered",
@@ -46,14 +57,11 @@ const registerUser  = (async (req, res)  => {
 })
 
 
-const login = asyncErrorHandler(async (req, res) => {
+const login = (async (req, res) => {
     const { password, email } = req.body;
     const [user] = await User.find({ email });
     if(!user){
-        res.status(401).json({
-            message:"user is not registered"
-        })
-        return;
+       throw new ApiError(401,"user not registered");
     }
     const result = await bcrypt.compare(password, user?.password);
     if (result) {
@@ -63,11 +71,11 @@ const login = asyncErrorHandler(async (req, res) => {
             token: token
         });
     } else {
-        res.status(400).json({ error: "user id and password is wrong" });
+        throw new ApiError( 400,"user id and password is wrong" );
     }
 })
 
-const genratePasswordResetToken = asyncErrorHandler(async (req, res) => {
+const genratePasswordResetToken = (async (req, res) => {
     const { email } = req.body;
     const [user] = await User.find({ email });
     if (!user) {
@@ -100,10 +108,11 @@ const genratePasswordResetToken = asyncErrorHandler(async (req, res) => {
     })
 })
 
-const resetPassword= asyncErrorHandler(async (req,res)=>{
+const resetPassword= (async (req,res)=>{
+    if(password != confirmPassword){
+        throw new ApiError(401,"password and confirm password must be match");
+    }
     const {password,confirmPassword,resetToken}=req.body;
-    const user=await User.findOne({passwordResetToken:resetToken});
-    console.log(user)
     if(!user){
         res.status(401).json({
             message:"token is not valid"
@@ -130,7 +139,7 @@ const resetPassword= asyncErrorHandler(async (req,res)=>{
     })
 })
 
-const emailVerify = asyncErrorHandler(async (req,res)=>{
+const emailVerify = (async (req,res)=>{
     
 })
 

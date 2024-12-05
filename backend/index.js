@@ -22,7 +22,7 @@ app.get("/hi",isAuthenticated,(req,res)=>{
 
 app.use("/api/v1/user",require("./routes/User.routes"));
 
-mongoose.connect('mongodb://127.0.0.1:27017/test')
+mongoose.connect('mongodb://127.0.0.1:27017/mokshMarg')
   .then(() => console.log('Connected!'));
 
 app.listen(PORT ,()=>{
