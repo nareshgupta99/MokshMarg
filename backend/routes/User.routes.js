@@ -10,15 +10,15 @@ const asyncErrorHandler = require("../utils/GlobalExceptionHandle");
 routes.post("/signup",asyncErrorHandler(registerUser));
 
 // login api
-routes.post("/login", login);
+routes.post("/login", asyncErrorHandler(login));
 
 //update password
-routes.put('/update-password', isAuthenticated,updatePassword);
+routes.put('/update-password', isAuthenticated,asyncErrorHandler(updatePassword));
 
 //forgot password
-routes.post("/forgot",genratePasswordResetToken);
+routes.post("/forgot",asyncErrorHandler(genratePasswordResetToken));
 
-routes.post("/reset-password",resetPassword);
+routes.post("/reset-password",asyncErrorHandler(resetPassword));
 
 routes.get("/email-verify");
 

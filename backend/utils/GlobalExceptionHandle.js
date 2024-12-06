@@ -8,7 +8,8 @@ const asyncErrorHandler = (func) => {
                 return next(err); // Pass to global error handler if `res` is undefined
             }
             console.log(err)
-            res.status(err.errCode).json({ message: err.message});
+            statusCode=err.Code || 500
+            res.status(statusCode).json({ message: err.message});
         }
     };
 };
