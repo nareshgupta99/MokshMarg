@@ -3,11 +3,15 @@ const mongoose = require("mongoose");
 // Define the schema for Temple
 const templeSchema = new mongoose.Schema({
     name: String,          // Name of the temple
-    openTime: Date,        // Opening time of the temple
-    closeTime: Date,       // Closing time of the temple
+    openTime: {
+        type:Date,require:false
+    },        // Opening time of the temple
+    closeTime:{
+        type:Date,require:false
+    },       // Closing time of the temple
     description: String,   // Description of the temple
-    longitude: Number,     // Longitude coordinate of the temple
-    latitude: Number,      // Latitude coordinate of the temple
+    longitude: String,     // Longitude coordinate of the temple
+    latitude: String,      // Latitude coordinate of the temple
     link: String           // URL or link for additional information about the temple
 });
 

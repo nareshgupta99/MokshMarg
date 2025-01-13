@@ -1,6 +1,6 @@
 const express = require("express");
 const routes = express.Router();
-const { createUserRole, getUserRoles, getUserRoleById, updateUserRole, deleteUserRole } = require("../controllers/UserRole.controller");
+const { createUserRole, getUserRoles, getUserRoleById, updateUserRole } = require("../controllers/UserRole.controller");
 const asyncErrorHandler = require("../utils/GlobalExceptionHandle");
 
 
@@ -18,10 +18,6 @@ routes.get("/:id", asyncErrorHandler(getUserRoleById));
 
 // Update a user-role mapping (PUT method)
 routes.put("/:id", asyncErrorHandler(updateUserRole));
-
-
-// Delete a user-role mapping (DELETE method)
-routes.delete("/:id", asyncErrorHandler(deleteUserRole));
 
 
 // Exporting the routes

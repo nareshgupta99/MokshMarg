@@ -21,6 +21,11 @@ app.get("/hi",isAuthenticated,(req,res)=>{
 
 
 app.use("/api/v1/user",require("./routes/User.routes"));
+app.use("/api/v1/hotel",require("./routes/Hotel.routes"));
+app.use("/api/v1/temple",require("./routes/Temple.routes"));
+app.use("/api/v1/guide",require("./routes/Guide.routes"));
+
+
 
 mongoose.connect('mongodb://127.0.0.1:27017/mokshMarg')
   .then(() => console.log('Connected!'));

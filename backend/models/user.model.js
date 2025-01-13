@@ -26,6 +26,9 @@ const userSchema = new mongoose.Schema({
     },
     expiryTime:{
         type:Date,require:false
+    },
+    imageUrl:{
+        type:String,require:false
     }
 });
 

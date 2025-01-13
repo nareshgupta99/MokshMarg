@@ -1,14 +1,16 @@
 // cloudinary.js
 const cloudinary = require('cloudinary').v2;
+const dotenv=require("dotenv");
+dotenv.config();
+
+const CLOUDINARY_API_KEY=process.env.CLOUDINARY_API_KEY
+const CLOUDINARY_API_SECRET=process.env.CLOUDINARY_API_SECRET
+const CLOUDINARY_CLOUD_NAME=process.env.CLOUDINARY_CLOUD_NAME
 
 cloudinary.config({
-    cloud_name: 'dnkci1bpn',  // Replace with your Cloudinary cloud name
-    api_key: '115195227181423',        // Replace with your Cloudinary API key
-    api_secret: 'tUaTGjau0rIZlQB3UV56AyQSz2I',
+    cloud_name: CLOUDINARY_CLOUD_NAME,  // Replace with your Cloudinary cloud name
+    api_key: CLOUDINARY_API_KEY,        // Replace with your Cloudinary API key
+    api_secret: CLOUDINARY_API_SECRET,
 });
 
 module.exports = cloudinary;
-
-// CLOUDINARY_API_KEY="115195227181423"
-// CLOUDINARY_API_SECRET="tUaTGjau0rIZlQB3UV56AyQSz2I"
-// CLOUDINARY_CLOUD_NAME="dnkci1bpn"

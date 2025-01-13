@@ -66,6 +66,12 @@ function getDecodedToken() {
   return decodedToken;
 }
 
+const isAuthorisedToRestaurant=async ()=>{
+  
+  const {email}=getDecodedToken();
+  
+
+}
 
 
 
