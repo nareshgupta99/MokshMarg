@@ -7,9 +7,10 @@ const asyncErrorHandler = (func) => {
             if (!res || !res.status) {
                 return next(err); // Pass to global error handler if `res` is undefined
             }
-            console.log(err)
-            statusCode=err.Code || 500
-            res.status(statusCode).json({ message: err.message});
+            console.log(err+"hello")
+            statusCode=err.errCode || 500
+            console.log("hh "+statusCode)
+            res.send({ message: err.message,statusCode:statusCode});
         }
     };
 };

@@ -1,6 +1,6 @@
-class ApiError extends Error {
+class ApiError extends Error {;
     constructor(errCode, message) {
-      super(message); 
+      super(); 
       this.name = this.constructor.name; 
       this.errCode = errCode; 
       this.message=message

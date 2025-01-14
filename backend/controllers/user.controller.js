@@ -40,10 +40,12 @@ const registerUser = (async (req, res) => {
 const login = (async (req, res) => {
     const { password, email } = req.body;
     const [user] = await User.find({ email });
+    
     if (!user) {
         throw new ApiError(401, "user not registered");
     }
     const result = await bcrypt.compare(password, user?.password);
+    console.log(result)
     if (result) {
         const token = await genrateJwtToken({ email });
         res.status(200).json({
