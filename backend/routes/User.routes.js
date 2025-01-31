@@ -1,8 +1,11 @@
 const express = require("express");
 const routes = express.Router();
 const { isAuthenticated } = require("../config/security.config");
-const { updatePassword, registerUser, login,genratePasswordResetToken,resetPassword }=require("../controllers/user.controller");
+const { updatePassword, registerUser, login,resetPassword ,updateProfileAvtar}=require("../controllers/user.controller");
 const asyncErrorHandler = require("../utils/GlobalExceptionHandle");
+const upload=require("../middleware/multer.config")
+const User=require("../models/user.model");
+
 
 
 
@@ -16,11 +19,27 @@ routes.post("/login", asyncErrorHandler(login));
 routes.put('/update-password', isAuthenticated,asyncErrorHandler(updatePassword));
 
 //forgot password
-routes.post("/forgot",asyncErrorHandler(genratePasswordResetToken));
+// routes.post("/forgot",asyncErrorHandler(s));
 
 routes.post("/reset-password",asyncErrorHandler(resetPassword));
 
-routes.get("/email-verify");
+routes.put("/update-profile",asyncErrorHandler());
+
+routes.put("/update-profile-avatar",asyncErrorHandler(isAuthenticated),asyncErrorHandler(upload.single('file')),asyncErrorHandler(updateProfileAvtar));
+
+routes.post("/generate-otp-mobile",asyncErrorHandler());
+
+routes.post("/generate-otp-email",asyncErrorHandler());
+
+routes.post("/verify-mobile",asyncErrorHandler());
+
+routes.post("/verify-email",asyncErrorHandler());
+
+
+
+
+
+
 
 
 

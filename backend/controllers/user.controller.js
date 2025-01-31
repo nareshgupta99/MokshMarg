@@ -1,36 +1,37 @@
-const { genrateJwtToken, encryptPassword, getDecodedToken } = require("../config/security.config");
+const { genrateJwtToken, LOOGED_USER } = require("../config/security.config");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
-const crypto = require('crypto');
 const emailSend = require('../config/email.config')
 const User = require("../models/user.model")
-const ApiError = require("../utils/ApiError")
-
+const ApiError = require("../utils/ApiError");
+const asyncErrorHandler = require("../utils/GlobalExceptionHandle");
+const fs = require('fs');
+const path = require('path');
+const cloudinary=require("../utils/Cloudinary")
 
 
 dotenv.config();
 
-const registerUser = (async (req, res) => {
+const registerUser = asyncErrorHandler(async (req, res) => {
     const { email, password, confirmPassword, name } = req.body;
     if (password != confirmPassword) {
         throw new ApiError(401, "password and confirm password must be match");
     }
-    const hash = await encryptPassword(password);
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.trim() });
     if (user) {
-        throw new ApiError(401, "user already registerd");
+        throw new ApiError(200, "user already registerd");
     }
 
     const savedUser = await User.create({
-        email,
-        password: hash,
-        name
+        email: email.trim(),
+        password: password.trim(),
+        name: name.trim()
     });
-    const token = await genrateJwtToken({
-        email
-    });
-    res.status(200).json({
+
+    const token = await savedUser.genrateAccessToken()
+
+    res.status(201).json({
         token: token,
         message: "user is successfully registered",
     });
@@ -40,14 +41,13 @@ const registerUser = (async (req, res) => {
 const login = (async (req, res) => {
     const { password, email } = req.body;
     const [user] = await User.find({ email });
-    
+
     if (!user) {
         throw new ApiError(401, "user not registered");
     }
     const result = await bcrypt.compare(password, user?.password);
-    console.log(result)
     if (result) {
-        const token = await genrateJwtToken({ email });
+        const token = await user.genrateAccessToken();
         res.status(200).json({
             message: "login successfull",
             token: token
@@ -63,41 +63,14 @@ const updatePassword = (async (req, res) => {
     const user = await User.findOne({ email });
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (isMatch) {
-        const newHashedPassword = await encryptPassword(newPassword);
-        user.password = newHashedPassword;
+        // const newHashedPassword = await encryptPassword(newPassword);
+        // user.password = newHashedPassword;
         await user.save();
         res.status(200).json({ message: "Password updated sucessfully" });
 
     } else {
         throw new ApiError(401, "current password is wrong");
     }
-})
-
-const genratePasswordResetToken = (async (req, res) => {
-    const { email } = req.body;
-    const [user] = await User.find({ email });
-    if (!user) {
-        throw new ApiError(401,"user email is not valid");
-    }
-    
-    // calculating expiry time
-    const now = new Date();
-    const expiryTime = new Date(now.getTime() + 30 * 60000);
-
-    const otp=Math.floor(100000 + Math.random() * 900000);
-    user.otp=otp;
-    user.expiryTime=expiryTime;
-
-    //saving into db
-    await user.save();
-
-    //send mail
-    await emailSend({ from: "jainnaresh1998@gmail.com", to: email, subject: "request for password reset", text:""+ otp });
-
-    // user.passwordResetToken=
-    res.status(200).send({
-        message: "email is send"
-    })
 })
 
 const resetPassword = (async (req, res) => {
@@ -131,9 +104,48 @@ const resetPassword = (async (req, res) => {
     })
 })
 
-const emailVerify = (async (req, res) => {
+const updateUserDetails = (async (req, res) => {
+
 
 })
 
+const genrateOtpForEmail = (async (req, res) => {
 
-module.exports = { updatePassword, registerUser, login, genratePasswordResetToken, resetPassword }
+})
+
+const genrateOtpForMobile = (async (req, res) => {
+
+})
+
+const verifyOtpForEmail = (async (req, res) => {
+
+})
+
+const verifyOtpForMobile = (async (req, res) => {
+
+})
+const updateProfileAvtar = (async (req, res) => {
+    
+    if(!req.file){
+        throw new ApiError(400,"no file found")
+    }
+    
+    const uploadedFilePath=path.join(req.file.destination,req.file.filename);
+
+    const result=await cloudinary.uploader.upload(uploadedFilePath);
+    fs.unlink(uploadedFilePath,(err)=>{
+        if(err) throw new ApiError(err.code,err.message);
+    });
+    
+    console.log(user)
+    console.log(result.secure_url);
+    console.log(result.public_id);
+    // cloudinary.uploader.destroy(publicId, function(result) {
+    //     console.log(result);
+    //   });
+
+    res.status(200).send({ message: "uploade success" })
+
+})
+
+module.exports = { updatePassword, registerUser, login, resetPassword, updateUserDetails, genrateOtpForEmail, genrateOtpForMobile, verifyOtpForEmail, verifyOtpForMobile, updateProfileAvtar }
