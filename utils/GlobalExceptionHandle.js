@@ -8,8 +8,8 @@ const asyncErrorHandler = (func) => {
                 return next(err); // Pass to global error handler if `res` is undefined
             }
             statusCode=err.errCode || 500
-            
-            res.send({ message: err.message,statusCode:statusCode});
+            console.log(err)
+            res.send({ status:err.status,message: err.message,statusCode:statusCode});
         }
     };
 };

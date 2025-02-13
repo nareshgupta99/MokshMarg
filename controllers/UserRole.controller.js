@@ -24,7 +24,7 @@ exports.assignRoleToUser = async (req, res) => {
     });
 
     await userRole.save();
-    res.status(201).json({ message: "Role assigned to user successfully" });
+    res.status(201).json({status:"success", message: "Role assigned to user successfully" });
 
 };
 

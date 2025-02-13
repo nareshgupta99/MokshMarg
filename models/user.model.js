@@ -6,10 +6,7 @@ const LOOGED_USER=require("../config/security.config");
 
 dotenv.config();
 const userSchema = new mongoose.Schema({
-    firstName: {
-        type: String, require: true
-    },
-    lastName: {
+    name: {
         type: String, require: true
     },
     address: {
@@ -24,22 +21,19 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String, require: true, min: 18
     },
-    isPhoneVerified: {
+    phoneVerified: {
         type: Boolean, default: false
     },
-    isEmailVerified: {
+    emailVerified: {
         type: Boolean, default: false
     },
-    otpForMbile: {
+    otp:{
         type: Number, require: false
     },
-    otpForEmail: {
-        type: Number, require: false
+    otpType:{
+        type:String
     },
-    expiryTimeForMobileOtp: {
-        type: Date, require: false
-    },
-    expiryTimeForEmailOtp: {
+    otpExpiry: {
         type: Date, require: false
     },
     avtar: {
