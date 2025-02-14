@@ -37,7 +37,12 @@ app.use("/api/v1/guide",require("./routes/Guide.routes"));
 
 
 
-mongoose.connect("mongodb://localhost:27017/mokshMarg")
+mongoose.connect("mongodb+srv://naresh:GF16QeEvGyy377PG@flutter.31o5v.mongodb.net/?retryWrites=true&w=majority&appName=flutter",
+{
+    connectTimeoutMS: 30000, // 30 seconds
+    socketTimeoutMS: 30000, // 30 seconds
+  }
+)
   .then(() => console.log('Connected!'))
   .catch((err) => console.log(err));
 

@@ -14,7 +14,7 @@ const { fail } = require("assert");
 dotenv.config();
 
 const registerUser = asyncErrorHandler(async (req, res) => {
-    const { email, password, confirmPassword, name } = req.body;
+    const { email, password, confirmPassword, name,phone } = req.body;
     if (password != confirmPassword) {
         throw new ApiError("fail",401, "password and confirm password must be match");
     }
@@ -34,7 +34,8 @@ const registerUser = asyncErrorHandler(async (req, res) => {
         name: name.trim(),
         otp:otp,
         type:"email_verify",
-        otpExpiry:expiryTime
+        otpExpiry:expiryTime,
+        phone:phone
     });
 
    await emailSend({to:email,subject:"verify email",text:`your one time otp is ${otp}`});
