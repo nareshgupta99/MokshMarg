@@ -38,6 +38,9 @@ const userSchema = new mongoose.Schema({
     },
     avtar: {
         type: String, require: false
+    },
+    accountType:{
+        type:String,require:true
     }
 });
 
